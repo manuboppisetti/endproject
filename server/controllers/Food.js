@@ -16,7 +16,11 @@ export const addProducts = async (req, res, next) => {
         name,
         desc,
         img,
-        price,
+        price:{
+          org:price.org,
+          mrp:price.mrp,
+          off:price.off
+        },
         ingredients,
         category,
       });

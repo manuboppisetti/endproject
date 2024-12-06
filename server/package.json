@@ -15,7 +15,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^6.13.5",
     "nodemailer": "^6.9.16",
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.1.7"
   },
   "author": "Rishav",
   "license": "ISC"

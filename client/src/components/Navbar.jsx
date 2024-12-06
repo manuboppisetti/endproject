@@ -24,6 +24,7 @@ const Nav = styled.div`
   top: 0;
   z-index: 10;
   color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 const NavContainer = styled.div`
   width: 100%;
@@ -36,7 +37,6 @@ const NavContainer = styled.div`
   font-size: 1rem;
 `;
 const NavLogo = styled(LinkR)`
-  width: 100%;
   display: flex;
   align-items: center;
   padding: 0 6px;
@@ -49,7 +49,6 @@ const Logo = styled.img`
   height: 34px;
 `;
 const NavItems = styled.ul`
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,38 +61,67 @@ const NavItems = styled.ul`
   }
 `;
 const Navlink = styled(NavLink)`
-  display: flex;
-  align-items: center;
   color: ${({ theme }) => theme.text_primary};
   font-weight: 500;
   cursor: pointer;
-  transition: all 1s slide-in;
+  transition: all 0.3s ease-in-out;
   text-decoration: none;
+
   &:hover {
     color: ${({ theme }) => theme.primary};
   }
+
   &.active {
     color: ${({ theme }) => theme.primary};
-    border-bottom: 1.8px solid ${({ theme }) => theme.primary};
+    border-bottom: 2px solid ${({ theme }) => theme.primary};
+  }
+`;
+const SearchContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  input {
+    padding: 6px 12px;
+    border: 1px solid ${({ theme }) => theme.primary};
+    border-radius: 20px;
+    outline: none;
+    width: 200px;
+    transition: width 0.3s ease-in-out;
+
+    &:focus {
+      width: 300px;
+    }
+  }
+
+  button {
+    background: none;
+    border: none;
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    color: ${({ theme }) => theme.primary};
+
+    &:hover {
+      color: ${({ theme }) => theme.text_primary};
+    }
   }
 `;
 const ButtonContainer = styled.div`
-  width: 100%;
-  height: 100%;
   display: flex;
   justify-content: flex-end;
   gap: 28px;
   align-items: center;
-  padding: 0 6px;
   color: ${({ theme }) => theme.primary};
+
   @media screen and (max-width: 768px) {
     display: none;
   }
 `;
-
 const MobileIcon = styled.div`
   color: ${({ theme }) => theme.text_primary};
   display: none;
+
   @media screen and (max-width: 768px) {
     display: flex;
     align-items: center;
@@ -102,6 +130,7 @@ const MobileIcon = styled.div`
 const MobileIcons = styled.div`
   color: ${({ theme }) => theme.text_primary};
   display: none;
+
   @media screen and (max-width: 768px) {
     display: flex;
     align-items: center;
@@ -109,36 +138,32 @@ const MobileIcons = styled.div`
     gap: 16px;
   }
 `;
-
 const MobileMenu = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: start;
   gap: 16px;
-  padding: 0 6px;
   list-style: none;
   width: 80%;
-  padding: 12px 40px 24px 40px;
+  padding: 12px 40px;
   background: ${({ theme }) => theme.card_light + 99};
   position: absolute;
   top: 80px;
   right: 0;
   transition: all 0.6s ease-in-out;
-  transform: ${({ isOpen }) =>
-    isOpen ? "translateY(0)" : "translateY(-100%)"};
+  transform: ${({ isOpen }) => (isOpen ? "translateY(0)" : "translateY(-100%)")};
   border-radius: 0 0 20px 20px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-  opacity: ${({ isOpen }) => (isOpen ? "100%" : "0")};
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  opacity: ${({ isOpen }) => (isOpen ? "1" : "0")};
   z-index: ${({ isOpen }) => (isOpen ? "1000" : "-1000")};
 `;
-
 const TextButton = styled.span`
-  text-align: end;
   color: ${({ theme }) => theme.secondary};
   cursor: pointer;
   font-size: 16px;
-  transition: all 0.3s ease;
   font-weight: 600;
+  transition: all 0.3s ease;
+
   &:hover {
     color: ${({ theme }) => theme.primary};
   }
@@ -147,6 +172,7 @@ const TextButton = styled.span`
 const Navbar = ({ setOpenAuth, openAuth, currentUser }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
+
   return (
     <Nav>
       <NavContainer>
@@ -156,29 +182,29 @@ const Navbar = ({ setOpenAuth, openAuth, currentUser }) => {
         <NavLogo to="/">
           <Logo src={LogoImg} />
         </NavLogo>
-
+        <SearchContainer>
+          <input type="text" placeholder="Search..." />
+          <button>
+            <SearchRounded />
+          </button>
+        </SearchContainer>
         <MobileIcons>
-          <Navlink to="/search">
-            <SearchRounded sx={{ color: "inherit", fontSize: "30px" }} />
-          </Navlink>
           <Navlink to="/favorite">
-            <FavoriteBorder sx={{ color: "inherit", fontSize: "28px" }} />
+            <FavoriteBorder style={{ fontSize: "28px" }} />
           </Navlink>
           <Navlink to="/cart">
-            <ShoppingCartOutlined sx={{ color: "inherit", fontSize: "28px" }} />
+            <ShoppingCartOutlined style={{ fontSize: "28px" }} />
           </Navlink>
           {currentUser && (
             <Avatar src={currentUser?.img}>{currentUser?.name[0]}</Avatar>
           )}
         </MobileIcons>
-
         <NavItems>
           <Navlink to="/">Home</Navlink>
           <Navlink to="/dishes">Dishes</Navlink>
           <Navlink to="/orders">Orders</Navlink>
           <Navlink to="/contact">Contact</Navlink>
         </NavItems>
-
         {isOpen && (
           <MobileMenu isOpen={isOpen}>
             <Navlink to="/" onClick={() => setIsOpen(false)}>
@@ -194,18 +220,11 @@ const Navbar = ({ setOpenAuth, openAuth, currentUser }) => {
               Contact
             </Navlink>
             {currentUser ? (
-              <>
-                <TextButton onClick={() => dispatch(logout())}>
-                  Logout
-                </TextButton>
-              </>
+              <TextButton onClick={() => dispatch(logout())}>
+                Logout
+              </TextButton>
             ) : (
-              <div
-                style={{
-                  display: "flex",
-                  gap: "12px",
-                }}
-              >
+              <div style={{ display: "flex", gap: "12px" }}>
                 <Button
                   text="Sign Up"
                   outlined
@@ -221,28 +240,22 @@ const Navbar = ({ setOpenAuth, openAuth, currentUser }) => {
             )}
           </MobileMenu>
         )}
-
         <ButtonContainer>
-          <Navlink to="/search">
-            <SearchRounded sx={{ color: "inherit", fontSize: "30px" }} />
-          </Navlink>
           {currentUser ? (
             <>
               <Navlink to="/favorite">
-                <FavoriteBorder sx={{ color: "inherit", fontSize: "28px" }} />
+                <FavoriteBorder style={{ fontSize: "28px" }} />
               </Navlink>
               <Navlink to="/cart">
-                <ShoppingCartOutlined
-                  sx={{ color: "inherit", fontSize: "28px" }}
-                />
+                <ShoppingCartOutlined style={{ fontSize: "28px" }} />
               </Navlink>
               <Avatar src={currentUser?.img}>{currentUser?.name[0]}</Avatar>
-              <TextButton onClick={() => dispatch(logout())}>Logout</TextButton>
+              <TextButton onClick={() => dispatch(logout())}>
+                Logout
+              </TextButton>
             </>
           ) : (
-            <>
-              <Button text="Sign In" small onClick={() => setOpenAuth(true)} />
-            </>
+            <Button text="Sign In" small onClick={() => setOpenAuth(true)} />
           )}
         </ButtonContainer>
       </NavContainer>
